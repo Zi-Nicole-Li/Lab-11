@@ -1,7 +1,7 @@
 Lab 11 - Smoking during pregnancy
 ================
-Insert your name here
-Insert date here
+Zi Li
+3/26
 
 ### Load packages and data
 
