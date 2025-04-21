@@ -11,14 +11,44 @@ output: github_document
 library(tidyverse) 
 library(tidymodels)
 library(openintro)
+
+data(ncbirths)
+
+nrow(ncbirths)
+# we got 1000 cases in the dataset. 
+
 ```
 
-### Exercise 1
+### Exercise-Baby weights
+```{r code for baby weights chunk}
+# H0:μ = 7.43 pounds
+# H1:μ /= 7.43 pounds
 
-Remove this text, and add your answer for Exercise 1 here.
-Add code chunks as needed.
-Don't forget to label your code chunk.
-Do not use spaces in code chunk labels.
+ncbirths_white <- ncbirths %>% filter(whitemom == "white")
+mean(ncbirths_white$weight, na.rm = TRUE)
+
+# Are the criteria necessary for conducting simulation-based inference satisfied? Explain your reasoning.
+# it's a shame for not entirely sure about the simulation-based inference.. but I looked up, and yes, I think it's satisfied. 
+# it's a random sample, the sample size is ok, and each case is independent to others. nice :)
+
+set.seed(123)
+null_dist <- ncbirths_white %>%
+  specify(response = weight) %>%
+  hypothesize(null = "point", mu = 7.43) %>%
+  generate(reps = 1000, type = "bootstrap") %>%
+  calculate(stat = "mean")
+
+obs_mean <- ncbirths_white %>%
+  specify(response = weight) %>%
+  calculate(stat = "mean")
+
+visualize(null_dist) +
+  shade_p_value(obs_stat = obs_mean$stat, direction = "two-sided")
+
+get_p_value(null_dist, obs_stat = obs_mean$stat, direction = "two-sided")
+
+
+```
 
 ### Exercise 2
 
